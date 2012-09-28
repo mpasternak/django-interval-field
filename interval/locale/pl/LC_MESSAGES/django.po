@@ -1,0 +1,60 @@
+# django-pgsql-interval-field
+# Polish translation by the author :-)
+# Michał Pasternak <michal.dtz@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-07 16:34+0100\n"
+"PO-Revision-Date: 2012-01-07 16:38+0100\n"
+"Last-Translator: Michał Pasternak <michal.dtz@gmail.com>\n"
+"Language-Team: polski <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bits\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: fields.py:67
+msgid "interval"
+msgstr "interwał"
+
+#: forms.py:76
+msgid "days"
+msgstr "dni"
+
+#: forms.py:77
+msgid "hours"
+msgstr "godziny"
+
+#: forms.py:77
+msgid "minutes"
+msgstr "minuty"
+
+#: forms.py:78
+msgid "seconds"
+msgstr "sekundy"
+
+#: forms.py:78
+msgid "microseconds"
+msgstr "mikrosekundy"
+
+#: forms.py:151
+#, python-format
+msgid "Bad value in ''%s'' subfield."
+msgstr "Niepoprawna wartość w polu ''%s''."
+
+#: forms.py:169
+msgid "This value is too large"
+msgstr "Ta wartość jest zbyt duża"
+
+#: forms.py:175
+#, python-format
+msgid "This interval must be at least: %s"
+msgstr "Długość tego interwału musi być conajmniej: %s"
+
+#: forms.py:180
+#, python-format
+msgid "This interval must be no more than: %s"
+msgstr "Długość tego interwału nie może przekraczać: %s"

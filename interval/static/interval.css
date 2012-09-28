@@ -1,0 +1,17 @@
+.interval_field {
+    margin-right: .2em;
+    width: 3em;
+    text-align: right;
+}
+
+.interval_microseconds_field {
+    width: 4em;
+}
+
+.change-form .aligned .interval_field {
+    float: left;
+}
+
+.change-form .aligned .interval_label {
+    float: left;
+}

@@ -1,0 +1,2 @@
+recursive-include interval *
+recursive-exclude test_project *
