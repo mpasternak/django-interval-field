@@ -84,7 +84,7 @@ class IntervalField(models.Field):
 
     def db_type(self, connection):
         if connection.settings_dict['ENGINE'].find('postgresql') >= 0 or \
-        	connection.settings_dict['ENGINE'].find('postgis') >= 0:
+                connection.settings_dict['ENGINE'].find('postgis') >= 0:
             return 'INTERVAL'
         return 'BIGINT'
 
@@ -146,11 +146,11 @@ class IntervalField(models.Field):
             return None
 
         if connection.settings_dict['ENGINE'].find('postgresql') >= 0 or \
-        	connection.settings_dict['ENGINE'].find('postgis') >= 0:
-			if isinstance(value, basestring):
-				# Can happen, when using south migrations
-				return value
-			return timedelta_topgsqlstring(value)
+                connection.settings_dict['ENGINE'].find('postgis') >= 0:
+            if isinstance(value, basestring):
+                # Can happen, when using south migrations
+                return value
+            return timedelta_topgsqlstring(value)
 
         return timedelta_tobigint(value)
 
