@@ -145,7 +145,8 @@ class IntervalField(models.Field):
         if value is None or value is '':
             return None
 
-        if connection.settings_dict['ENGINE'].find('postgresql') >= 0:
+        if connection.settings_dict['ENGINE'].find('postgresql') >= 0 or \
+        	connection.settings_dict['ENGINE'].find('postgis') >= 0:
 			if isinstance(value, basestring):
 				# Can happen, when using south migrations
 				return value
