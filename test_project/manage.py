@@ -1,5 +1,14 @@
 #!/usr/bin/env python
-from django.core.management import execute_manager
+try:
+    from django.core.management import execute_manager
+    def boot(settings):
+        execute_manager(settings)
+
+except ImportError:
+    from django.core.management import execute_from_command_line
+    def boot(settings):
+        execute_from_command_line(sys.argv)
+
 import imp
 try:
     imp.find_module('settings') # Assumed to be in the same directory.
@@ -11,4 +20,4 @@ except ImportError:
 import settings
 
 if __name__ == "__main__":
-    execute_manager(settings)
+    boot(settings)
