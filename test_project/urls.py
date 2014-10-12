@@ -1,7 +1,6 @@
-try:
-    from django.conf.urls.defaults import patterns, include, url
-except ImportError:
-    from django.conf.urls import patterns, url, include
+from django.views.generic.base import TemplateView
+
+from django.conf.urls import patterns, url, include
 
 import settings
 import os
@@ -11,10 +10,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 
-    url(r'^$',
-        'django.views.generic.simple.direct_to_template',
-        {'template': 'index.html'}
-        ),
+    url(r'^$', TemplateView.as_view(template_name="index.html")),
 
     url(r'^test/', 'test_app.views.test_index'),
 
