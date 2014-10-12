@@ -7,6 +7,7 @@ django-interval-field
 INTERVAL field for PostgreSQL (and an approximation for other backends)
 
  * tested
+ * supports Django 1.6 and 1.7
  * internationalized
  * supports PostgreSQL, MySQL, SQLite
  * works with Dojango
