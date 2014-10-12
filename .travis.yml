@@ -15,7 +15,8 @@ install:
 script:
   - export DJANGO_SETTINGS_MODULE=settings
   - export PYTHONPATH=..:$PYTHONPATH
-  - cd test_project && python manage.py test interval test_app
+  - cd test_project 
+  - python manage.py test interval test_app
   - coverage run --source=../interval manage.py test interval test_app
 
 after_success:
