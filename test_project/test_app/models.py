@@ -28,13 +28,6 @@ class TestModel(models.Model):
     )
 
     def __str__(self):
-        fields = [
-                self.not_required_interval,
-                self.required_interval,
-                self.required_interval_with_limits
-        ]
-
-
         return ", ".join(
             [
                 six.text_type(self.not_required_interval),
