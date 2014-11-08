@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.db import models
+from django.db.models.fields.subclassing import SubfieldBase
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
@@ -54,7 +55,7 @@ def range_check(value, name, min=None, max=None):
     return value
 
 
-class IntervalField(models.Field):
+class IntervalField(six.with_metaclass(SubfieldBase, models.Field)):
     """This is a field, which maps to Python's datetime.timedelta.
 
     For PostgreSQL, its type is INTERVAL - a native interval type.
@@ -63,8 +64,6 @@ class IntervalField(models.Field):
     For other databases, its type is BIGINT and timedelta value is stored
     as number of seconds * 1000000 .
     """
-
-    __metaclass__ = models.SubfieldBase
 
     description = _("interval")
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Interval demo - main page</title>
+</head>
+
+<body>
+    <ol>
+        {% for object in object_list %}
+        <li><a href="{% url "detail_model" object.pk %}">{{ object }}</a></li>
+        {% empty %}
+        <li>There are no models, yet.</li>
+        {% endfor %}
+    </ol>
+        
+    <br>
+    <a href="{% url "create_model" %}">-> Add a model.
+</body>
+</html>

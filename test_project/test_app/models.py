@@ -1,10 +1,13 @@
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils import six
+from django.utils.encoding import python_2_unicode_compatible
 
 from interval.fields import IntervalField
 
 from datetime import timedelta
 
-
+@python_2_unicode_compatible
 class TestModel(models.Model):
 
     not_required_interval = IntervalField(
@@ -24,10 +27,20 @@ class TestModel(models.Model):
         format='DHMSX'
     )
 
-    def __unicode__(self):
+    def __str__(self):
+        fields = [
+                self.not_required_interval,
+                self.required_interval,
+                self.required_interval_with_limits
+        ]
+
+
         return ", ".join(
             [
-                unicode(self.not_required_interval),
-                unicode(self.required_interval),
-                unicode(self.required_interval_with_limits)
+                six.text_type(self.not_required_interval),
+                six.text_type(self.required_interval),
+                six.text_type(self.required_interval_with_limits)
             ])
+
+    def get_absolute_url(self):
+        return reverse("detail_model", args=[str(self.pk)])

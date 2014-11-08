@@ -92,7 +92,7 @@ class TestIntervalFields(TestCase):
                                "00:00:61",
                                "xx days, 12:12:12.123",
                                "12 dayz, 00:00:00",
-                                "00:00:00.12345672930923890"]
+                               "00:00:00.12345672930923890"]
 
             a = IntervalField()
 
@@ -129,16 +129,14 @@ class TestIntervalFields(TestCase):
                 ]:
                 self.assertEqual(a.to_python(value), should_be)
 
-        orig_dbe = settings.DATABASES['default']['ENGINE']
+        # "path" the settings rather than changing them because it might
+        # effect other tests if do_some_tests raises an exception.
+        # See: https://docs.djangoproject.com/en/dev/topics/testing/tools/#django.test.SimpleTestCase.settings
+        with self.settings(DATABASES={"default": {"ENGINE": "postgresql_psycopg2"}}):
+            do_some_tests()
 
-        settings.DATABASES['default']['ENGINE'] = 'postgresql_psycopg2'
-        do_some_tests()
-
-        settings.DATABASES['default']['ENGINE'] = 'something_else_than_pgsql'
-        do_some_tests()
-
-        # Leave everything as it was
-        settings.DATABASES['default']['ENGINE'] = orig_dbe
+        with self.settings(DATABASES={"default": {"ENGINE": "something_else_than_pgsql"}}):
+            do_some_tests()
 
     def test_IntervalField_get_db_prep_value(self):
         f = IntervalField()
