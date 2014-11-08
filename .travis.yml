@@ -5,12 +5,27 @@ python:
   - "2.7"
   - "3.3"
 
+addons:
+  postgresql: "9.2"
+
 env:
   - DJANGO=1.6
+    PSQL=0
+    
+  - DJANGO=1.6
+    PSQL=1
+    
   - DJANGO=1.7
+    PSQL=0
+        
+  - DJANGO=1.7
+    PSQL=1
+    
+before_script:
+  - psql -c 'create database travisci;' -U postgres
 
 install:
-  - pip install django==$DJANGO coverage six --quiet
+  - pip install django==$DJANGO coverage six psycopg2 --quiet 
 
 script:
   - export DJANGO_SETTINGS_MODULE=settings
@@ -21,7 +36,3 @@ script:
 
 after_success:
   coveralls
-
-matrix:
-  allow_failures:
-    - python: "3.3"

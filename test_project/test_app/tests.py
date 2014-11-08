@@ -5,6 +5,7 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 from datetime import timedelta
+from time import sleep
 
 from django.test import TestCase
 from django.test import Client
@@ -52,14 +53,13 @@ class TestTestApp(TestCase):
             }, follow=True
         )
 
-        self.assertRedirects(response, "/detail/1")
+        self.assertRedirects(response, "/detail/{}".format(TestModel.objects.get().pk))
 
         allObjects = TestModel.objects.all()
         self.assertEqual(1, len(allObjects))
 
         obj = allObjects[0]
         self.assertEqual("1 day, 3:00:00, 1:00:00, 2 days, 1:10:04", str(obj))
-
         exp = timedelta(days=2, hours=1, minutes=10, seconds=4)
         self.assertEqual(exp, obj.required_interval_with_limits)
         self.assertEqual(timedelta(hours=1), obj.required_interval)
@@ -70,12 +70,20 @@ class TestTestApp(TestCase):
             not_required_interval=timedelta(days=1),
             required_interval=timedelta(weeks=2),
             required_interval_with_limits=timedelta(days=3),
-        )
+            )
 
-        response = self.client.get("/detail/1")
+        response = self.client.get("/detail/{}".format(TestModel.objects.get().pk))
         self.assertEqual(200, response.status_code)
         self.assertContains(response, "1 day, 0:00:00, 14 days, 0:00:00, 3 days, 0:00:00")
 
+    def test_edit(self):
+        TestModel.objects.create(
+            not_required_interval=timedelta(days=1),
+            required_interval=timedelta(weeks=2),
+            required_interval_with_limits=timedelta(days=3),
+            )
+        response = self.client.get("/edit/{}".format(TestModel.objects.get().pk))
+        self.assertEqual(200, response.status_code)
 
 class TestTestAppAdmin(TestCase):
     def setUp(self):

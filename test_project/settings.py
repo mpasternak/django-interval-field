@@ -10,11 +10,37 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test_project.sqlite3',
+usePSQL = False
+if "PSQL" is os.environ:
+    try:
+        usePSQL = int(os.environ["PSQL"])
+    except ValueError:
+        usePSQL = os.environ["PSQL"]
+
+if os.environ.get("PSQL", "0") == "1":
+    print("Using PostgreSQL as the database backend")
+    os.environ.setdefault("PSQL_ENGINE", "django.db.backends.postgresql_psycopg2")
+    if "TRAVIS" in os.environ:
+        os.environ.setdefault("PSQL_NAME", "travisci")
+        os.environ.setdefault("PSQL_USER", "postgres")
+
+    DATABASES = {
+        'default': {
+            'ENGINE':   os.environ.get("PSQL_ENGINE"),
+            'NAME':     os.environ.get("PSQL_NAME"),
+            'USER':     os.environ.get("PSQL_USER"),
+            'PASSWORD': os.environ.get("PSQL_PASSWORD", ""),
+            'HOST':     os.environ.get("PSQL_HOST", "localhost"),
+            'PORT':     os.environ.get("PSQL_POST", ""),
+        }
     }
+else:
+    print("Using SQLite3 as the database backend")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_project.sqlite3',
+        }
 }
 
 TIME_ZONE = 'America/Chicago'
