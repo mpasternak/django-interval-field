@@ -7,6 +7,7 @@ from django.forms.models import ModelForm
 
 class TestForm(ModelForm):
     class Meta:
+        fields = "__all__"
         model = TestModel
 
 
