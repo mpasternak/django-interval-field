@@ -10,7 +10,7 @@ from django.test import TestCase
 from django.test import Client
 
 from django.contrib.auth.models import User
-from test_project.test_app.models import TestModel
+from test_app.models import TestModel
 
 MICSEC = 10**6
 

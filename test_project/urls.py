@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url, include
 from django.conf import settings
 from django.contrib import admin
 
-from test_project.test_app.views import ModelListView, ModelCreateView, ModelDetailView, ModelEditView
+from test_app.views import ModelListView, ModelCreateView, ModelDetailView, ModelEditView
 
 
 admin.autodiscover()

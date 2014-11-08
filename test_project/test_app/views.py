@@ -8,12 +8,6 @@ from django.views.generic.edit import FormView, CreateView, UpdateView
 from django.views.generic.list import ListView
 
 
-class TestForm(ModelForm):
-    class Meta:
-        fields = "__all__"
-        model = TestModel
-
-
 class ModelListView(ListView):
     model = TestModel
     template_name = "list.html"
@@ -22,15 +16,16 @@ class ModelListView(ListView):
 class ModelCreateView(CreateView):
     model = TestModel
     template_name = "form.html"
+    fields = "__all__"
 
 
 class ModelDetailView(DetailView):
     model = TestModel
     template_name = "detail.html"
+    fields = "__all__"
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     print(request, *args, **kwargs)
 
 class ModelEditView(UpdateView):
     model = TestModel
     template_name = "form.html"
+    fields = "__all__"
