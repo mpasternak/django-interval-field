@@ -21,7 +21,7 @@ class TestTestApp(TestCase):
 
     def test_test(self):
         res = self.client.get('/test/')
-        self.assertEquals(res.status_code, 200)
+        self.assertEqual(res.status_code, 200)
 
 
 class TestTestAppAdmin(TestCase):

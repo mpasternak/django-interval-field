@@ -10,7 +10,7 @@ env:
   - DJANGO=1.7
 
 install:
-  - pip install django==$DJANGO coverage --quiet
+  - pip install django==$DJANGO coverage six --quiet
 
 script:
   - export DJANGO_SETTINGS_MODULE=settings

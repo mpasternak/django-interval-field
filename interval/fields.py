@@ -5,6 +5,7 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
 from datetime import timedelta
+import six
 
 from interval.forms import IntervalFormField
 
@@ -99,7 +100,7 @@ class IntervalField(models.Field):
 
         # string forms: in form like "X days, HH:MM:SS.ms" (can be used in
         # fixture files)
-        if isinstance(value, basestring) and value.find(":") >= 0:
+        if isinstance(value, six.string_types) and value.find(":") >= 0:
             days = 0
 
             if value.find("days,") >= 0 or value.find("day,") >= 0:
@@ -147,7 +148,7 @@ class IntervalField(models.Field):
 
         if connection.settings_dict['ENGINE'].find('postgresql') >= 0 or \
                 connection.settings_dict['ENGINE'].find('postgis') >= 0:
-            if isinstance(value, basestring):
+            if isinstance(value, six.string_types):
                 # Can happen, when using south migrations
                 return value
             return timedelta_topgsqlstring(value)

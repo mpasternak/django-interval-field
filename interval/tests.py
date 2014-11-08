@@ -29,7 +29,7 @@ class TestIntervalFields(TestCase):
             (timedelta(0, 1, 0), '1 SECONDS'),
             (timedelta(0, 0, 0), '0')]:
             v = timedelta_topgsqlstring(input)
-            self.assertEquals(v, should_be)
+            self.assertEqual(v, should_be)
 
     def test_timedelta_tobigint(self):
         for input, should_be in [
@@ -37,10 +37,10 @@ class TestIntervalFields(TestCase):
              1 * 3600 * 24 * microseconds + 1 * microseconds + 1),
             (timedelta(0, 0, 0), 0)]:
             v = timedelta_tobigint(input)
-            self.assertEquals(v, should_be)
+            self.assertEqual(v, should_be)
 
     def test_range_check(self):
-        self.assertEquals(range_check('5', 'foo'), 5)
+        self.assertEqual(range_check('5', 'foo'), 5)
 
         for args in [
             ('xx', 'foo'),
@@ -62,10 +62,10 @@ class TestIntervalFields(TestCase):
     def test_IntervalField_db_type(self):
 
         f = IntervalField()
-        self.assertEquals(
+        self.assertEqual(
             f.db_type(connection=FakeConnection('postgresql')),
             'INTERVAL')
-        self.assertEquals(
+        self.assertEqual(
             f.db_type(connection=FakeConnection('mysql')),
             'BIGINT')
 
@@ -127,7 +127,7 @@ class TestIntervalFields(TestCase):
                 ("2 days, 00:00:05.000001",
                  timedelta(days=2, seconds=5, microseconds=1)),
                 ]:
-                self.assertEquals(a.to_python(value), should_be)
+                self.assertEqual(a.to_python(value), should_be)
 
         orig_dbe = settings.DATABASES['default']['ENGINE']
 
@@ -156,7 +156,7 @@ class TestIntervalFields(TestCase):
                                  connection=FakeConnection('mysql')),
              1 * 3600 * 24 * microseconds)
             ]:
-            self.assertEquals(value, should_be)
+            self.assertEqual(value, should_be)
 
     def test_IntervalField_formfield(self):
         f = IntervalField()
@@ -205,19 +205,19 @@ class TestIntervalForms(TestCase):
         v = w.value_from_datadict(
             prepend("foo_", widgetParams()), [], 'foo'
         )
-        self.assertEquals(v, widgetParams())
+        self.assertEqual(v, widgetParams())
 
         w = IntervalWidget('D')
         v = w.value_from_datadict(
             dict(foo_days='1'), [], 'foo'
         )
-        self.assertEquals(v, dict(days=1))
+        self.assertEqual(v, dict(days=1))
 
         w = IntervalWidget('D')
         v = w.value_from_datadict(
             dict(foo_days='X'), [], 'foo'
         )
-        self.assertEquals(v, dict(days='X', BAD='days'))
+        self.assertEqual(v, dict(days='X', BAD='days'))
 
     def test_IntervalFormField_clean(self):
         a = IntervalFormField(format='DHMSX', required=True)
