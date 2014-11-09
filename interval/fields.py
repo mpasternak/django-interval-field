@@ -1,10 +1,12 @@
 # -*- encoding: utf-8 -*-
 
 from django.db import models
+from django.db.models.fields.subclassing import SubfieldBase
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
 from datetime import timedelta
+import six
 
 from interval.forms import IntervalFormField
 
@@ -53,7 +55,7 @@ def range_check(value, name, min=None, max=None):
     return value
 
 
-class IntervalField(models.Field):
+class IntervalField(six.with_metaclass(SubfieldBase, models.Field)):
     """This is a field, which maps to Python's datetime.timedelta.
 
     For PostgreSQL, its type is INTERVAL - a native interval type.
@@ -62,8 +64,6 @@ class IntervalField(models.Field):
     For other databases, its type is BIGINT and timedelta value is stored
     as number of seconds * 1000000 .
     """
-
-    __metaclass__ = models.SubfieldBase
 
     description = _("interval")
 
@@ -99,7 +99,7 @@ class IntervalField(models.Field):
 
         # string forms: in form like "X days, HH:MM:SS.ms" (can be used in
         # fixture files)
-        if isinstance(value, basestring) and value.find(":") >= 0:
+        if isinstance(value, six.string_types) and value.find(":") >= 0:
             days = 0
 
             if value.find("days,") >= 0 or value.find("day,") >= 0:
@@ -147,7 +147,7 @@ class IntervalField(models.Field):
 
         if connection.settings_dict['ENGINE'].find('postgresql') >= 0 or \
                 connection.settings_dict['ENGINE'].find('postgis') >= 0:
-            if isinstance(value, basestring):
+            if isinstance(value, six.string_types):
                 # Can happen, when using south migrations
                 return value
             return timedelta_topgsqlstring(value)

@@ -18,5 +18,5 @@ setup(
         'locale/pl/LC_MESSAGES/django.po',
     ]},
     include_package_data=True,
-    install_requires=['django'],
+    install_requires=['django', 'six'],
     zip_safe=False)
