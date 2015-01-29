@@ -6,19 +6,19 @@ python:
   - "3.3"
 
 addons:
-  postgresql: "9.4"
+  postgresql: "9.2"
 
 env:
-  - DJANGO=1.6.10
+  - DJANGO=1.6
     PSQL=0
     
-  - DJANGO=1.6.10
+  - DJANGO=1.6
     PSQL=1
     
-  - DJANGO=1.7.4
+  - DJANGO=1.7
     PSQL=0
         
-  - DJANGO=1.7.4
+  - DJANGO=1.7
     PSQL=1
     
 before_script:
