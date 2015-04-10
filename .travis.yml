@@ -20,6 +20,12 @@ env:
         
   - DJANGO=1.7
     PSQL=1
+
+  - DJANGO=1.8
+    PSQL=0
+
+  - DJANGO=1.8
+    PSQL=1
     
 before_script:
   - psql -c 'create database travisci;' -U postgres
