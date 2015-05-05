@@ -8,7 +8,7 @@ setup(
     version='0.9.3',
     author=u'Michał Pasternak - FHU Kagami',
     author_email='michal.dtz@gmail.com',
-    url='http://code.google.com/p/django-pgsql-interval-field/',
+    url='https://github.com/mpasternak/django-interval-field',
     license='MIT',
     description='Support for PostgreSQL INTERVAL for Django',
     packages=find_packages(exclude=['test_project']),
