@@ -4,34 +4,35 @@ language:
 python:
   - "2.7"
   - "3.3"
+  - "3.4"
 
 addons:
-  postgresql: "9.2"
+  postgresql: "9.3"
 
 env:
-  - DJANGO=1.6
+  - DJANGO="Django>=1.6.0,<1.7.0"
     PSQL=0
     
-  - DJANGO=1.6
+  - DJANGO="Django>=1.6.0,<1.7.0"
     PSQL=1
     
-  - DJANGO=1.7
+  - DJANGO="Django>=1.7.0,<1.8.0"
     PSQL=0
         
-  - DJANGO=1.7
+  - DJANGO="Django>=1.7.0,<1.8.0"
     PSQL=1
 
-  - DJANGO=1.8
+  - DJANGO="Django>=1.8.0,<1.9.0"
     PSQL=0
 
-  - DJANGO=1.8
+  - DJANGO="Django>=1.8.0,<1.9.0"
     PSQL=1
     
 before_script:
   - psql -c 'create database travisci;' -U postgres
 
 install:
-  - pip install django==$DJANGO coverage six psycopg2 --quiet 
+  - pip install $DJANGO coverage six psycopg2 --quiet 
 
 script:
   - export DJANGO_SETTINGS_MODULE=settings
