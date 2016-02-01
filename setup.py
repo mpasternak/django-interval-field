@@ -5,8 +5,8 @@ from setuptools import find_packages
 
 setup(
     name='django-pgsql-interval-field',
-    version='0.9.3',
-    author=u'Michał Pasternak - FHU Kagami',
+    version='0.9.4',
+    author=u'Michał Pasternak',
     author_email='michal.dtz@gmail.com',
     url='https://github.com/mpasternak/django-interval-field',
     license='MIT',
