@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 from django.db import models
-from django.db.models.fields.subclassing import SubfieldBase
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
@@ -31,11 +30,14 @@ def timedelta_topgsqlstring(value):
 
 
 def timedelta_tobigint(value):
-    return (
-        value.days * day_seconds * microseconds
-        + value.seconds * microseconds
-        + value.microseconds
-        )
+    if type(value) == int:
+        return value
+    else:
+        return (
+            value.days * day_seconds * microseconds
+            + value.seconds * microseconds
+            + value.microseconds
+            )
 
 
 def range_check(value, name, min=None, max=None):
@@ -55,7 +57,7 @@ def range_check(value, name, min=None, max=None):
     return value
 
 
-class IntervalField(six.with_metaclass(SubfieldBase, models.Field)):
+class IntervalField(models.Field):
     """This is a field, which maps to Python's datetime.timedelta.
 
     For PostgreSQL, its type is INTERVAL - a native interval type.
@@ -141,6 +143,9 @@ class IntervalField(six.with_metaclass(SubfieldBase, models.Field)):
         # other database backends:
         return timedelta(seconds=float(value) / microseconds)
 
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
+
     def get_db_prep_value(self, value, connection, prepared=False):
         if value is None or value is '':
             return None
@@ -150,8 +155,9 @@ class IntervalField(six.with_metaclass(SubfieldBase, models.Field)):
             if isinstance(value, six.string_types):
                 # Can happen, when using south migrations
                 return value
+            if type(value) == int:
+                value = timedelta(seconds=float(value) / microseconds)
             return timedelta_topgsqlstring(value)
-
         return timedelta_tobigint(value)
 
     def formfield(self, form_class=IntervalFormField, **kwargs):

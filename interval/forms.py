@@ -2,10 +2,10 @@
 
 from django.utils.safestring import mark_safe
 from django.conf import settings
-from django.forms.util import ValidationError
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
-from django.utils.datastructures import SortedDict
 from datetime import timedelta
+from collections import OrderedDict
 
 ENABLE_DOJANGO = False
 
@@ -20,7 +20,7 @@ else:
     from django.forms import Field
 
 
-format_desc = SortedDict([
+format_desc = OrderedDict([
     ('D', 'days'),
     ('H', 'hours'),
     ('M', 'minutes'),
