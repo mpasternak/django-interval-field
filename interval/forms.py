@@ -1,10 +1,18 @@
 # -*- encoding: utf-8 -*-
 
+import django
+
 from django.utils.safestring import mark_safe
 from django.conf import settings
-from django.forms.util import ValidationError
+if django.VERSION[1] > 8:
+    from django.forms.utils import ValidationError
+else:
+    from django.forms.util import ValidationError
 from django.utils.translation import ugettext as _
-from django.utils.datastructures import SortedDict
+if django.VERSION[1] > 8:
+    from django.utils.datastructures import OrderedDict as SortedDict
+else:
+    from django.utils.datastructures import SortedDict
 from datetime import timedelta
 
 ENABLE_DOJANGO = False
