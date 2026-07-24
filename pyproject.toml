@@ -28,7 +28,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Topic :: Database",
 ]
-dependencies = ["django>=4.2", "six"]
+dependencies = ["django>=4.2"]
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-django"]
