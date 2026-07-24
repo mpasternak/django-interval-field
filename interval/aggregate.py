@@ -1,15 +1,17 @@
 from django.db.models import Avg as _Avg
-from django.db.models.sql.aggregates import Avg as _AvgSQL
 
 from interval.fields import IntervalField
 
 
-class AvgSQL(_AvgSQL):
-    is_computed = False
-
-
 class Avg(_Avg):
-    def add_to_query(self, query, alias, col, source, is_summary):
-        aggregate = AvgSQL(col, source=IntervalField(), is_summary=is_summary,
-                           **self.extra)
-        query.aggregates[alias] = aggregate
+    """Average an IntervalField and return the result as a timedelta.
+
+    ``django.db.models.sql.aggregates`` (used by the previous implementation)
+    was removed in Django 1.8. The modern aggregation API only needs the
+    output field declared so the averaged value is coerced back to an
+    interval.
+    """
+
+    def __init__(self, *expressions, **extra):
+        extra.setdefault("output_field", IntervalField())
+        super().__init__(*expressions, **extra)

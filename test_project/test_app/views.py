@@ -1,10 +1,8 @@
-from django.shortcuts import render_to_response
-
-from test_app.models import TestModel
-
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+
+from test_app.models import TestModel
 
 
 class ModelListView(ListView):
