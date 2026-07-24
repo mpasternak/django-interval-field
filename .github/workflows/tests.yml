@@ -1,0 +1,77 @@
+name: Tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Derived from requires-python (>=3.10) + the django>=4.2 constraint
+        # + the canonical Django x Python compatibility matrix. Only the
+        # upstream-supported Django series are tested (5.2 LTS and 6.0);
+        # 4.2/5.0/5.1 are EOL. Recompute this list on every re-run.
+        include:
+          # Django 5.2 LTS (Python 3.10-3.14)
+          - { python-version: "3.10", django-version: "5.2" }
+          - { python-version: "3.11", django-version: "5.2" }
+          - { python-version: "3.12", django-version: "5.2" }
+          - { python-version: "3.13", django-version: "5.2" }
+          - { python-version: "3.14", django-version: "5.2" }
+          # Django 6.0 (Python 3.12-3.14 only)
+          - { python-version: "3.12", django-version: "6.0" }
+          - { python-version: "3.13", django-version: "6.0" }
+          - { python-version: "3.14", django-version: "6.0" }
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history + tags so setuptools-scm can derive the version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies (project + Django ${{ matrix.django-version }})
+        run: |
+          uv sync --all-extras
+          uv pip install "django~=${{ matrix.django-version }}.0"
+
+      - name: Run tests (SQLite)
+        run: uv run pytest
+        # NOTE: the original Travis CI also ran the suite against PostgreSQL
+        # (PSQL=1) via a postgres service + psycopg2. That path needs the legacy
+        # settings/code modernized first, so it is intentionally not migrated
+        # here. Restore a `services: postgres` block, a psycopg dependency, and
+        # the PSQL_* env wiring during the code-port pass.
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Lint with ruff (informational)
+        run: uvx ruff check . || true
+
+      - name: Check formatting with ruff (informational)
+        run: uvx ruff format --check . || true
