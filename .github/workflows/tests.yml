@@ -46,13 +46,14 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
 
-      - name: Install dependencies (project + Django ${{ matrix.django-version }})
-        run: |
-          uv sync --all-extras
-          uv pip install "django~=${{ matrix.django-version }}.0"
+      - name: Install dependencies
+        run: uv sync --all-extras
 
-      - name: Run tests (SQLite)
-        run: uv run pytest
+      - name: Run tests (Django ${{ matrix.django-version }}, SQLite)
+        # `uv run` re-syncs to the lockfile, so a plain `uv pip install django`
+        # would be reverted. The --with overlay resolves Django to the matrix
+        # minor within the project's `django>=4.2` constraint for this run.
+        run: uv run --with "django~=${{ matrix.django-version }}.0" pytest
         # NOTE: the original Travis CI also ran the suite against PostgreSQL
         # (PSQL=1) via a postgres service + psycopg2. That path needs the legacy
         # settings/code modernized first, so it is intentionally not migrated
