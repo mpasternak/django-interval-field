@@ -167,7 +167,12 @@ class IntervalField(models.Field):
             value = self.to_python(value)
 
         if is_postgresql:
-            return timedelta_topgsqlstring(value)
+            # Hand the timedelta straight to the driver: both psycopg2 and
+            # psycopg3 adapt a datetime.timedelta to a native PostgreSQL
+            # INTERVAL. Serialising to a text string (the old behaviour) only
+            # worked by relying on PostgreSQL's implicit text -> interval
+            # parsing, which is fragile across driver/server versions.
+            return value
 
         return timedelta_tobigint(value)
 
