@@ -37,6 +37,12 @@ Issues = "https://github.com/mpasternak/django-interval-field/issues"
 
 [tool.setuptools_scm]
 
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+
 [tool.setuptools.packages.find]
 include = ["interval*"]
 
