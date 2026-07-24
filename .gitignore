@@ -29,3 +29,29 @@ uv.lock
 
 #Mr Developer
 .mr.developer.cfg
+
+# Python cache
+__pycache__/
+*$py.class
+.eggs/
+
+# Virtual environments
+venv/
+ENV/
+
+# Testing
+.pytest_cache/
+htmlcov/
+
+# Distribution
+*.tar.gz
+*.whl
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
