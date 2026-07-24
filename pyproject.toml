@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=77.0"]
+requires = ["setuptools>=77.0", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-pgsql-interval-field"
-version = "0.9.3"
+dynamic = ["version"]
 description = "Support for PostgreSQL INTERVAL for Django"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -34,6 +34,8 @@ dependencies = ["django>=4.2", "six"]
 Homepage = "https://github.com/mpasternak/django-interval-field"
 Repository = "https://github.com/mpasternak/django-interval-field"
 Issues = "https://github.com/mpasternak/django-interval-field/issues"
+
+[tool.setuptools_scm]
 
 [tool.setuptools.packages.find]
 include = ["interval*"]
