@@ -54,11 +54,92 @@ jobs:
         # would be reverted. The --with overlay resolves Django to the matrix
         # minor within the project's `django>=4.2` constraint for this run.
         run: uv run --with "django~=${{ matrix.django-version }}.0" pytest
-        # NOTE: the original Travis CI also ran the suite against PostgreSQL
-        # (PSQL=1) via a postgres service + psycopg2. That path needs the legacy
-        # settings/code modernized first, so it is intentionally not migrated
-        # here. Restore a `services: postgres` block, a psycopg dependency, and
-        # the PSQL_* env wiring during the code-port pass.
+        # This job covers the BIGINT fallback path only. The native PostgreSQL
+        # INTERVAL path is exercised by the `test-postgres` job below.
+
+  test-postgres:
+    # Exercises the native PostgreSQL INTERVAL code path (db_type() -> INTERVAL,
+    # get_db_prep_value() handing a timedelta to psycopg, and reading an
+    # INTERVAL column back as a timedelta). The SQLite matrix above only
+    # covers the BIGINT fallback. A small 2-cell matrix (5.2 LTS + 6.0 on a
+    # recent Python) keeps CI cost low.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { python-version: "3.13", django-version: "5.2" }
+          - { python-version: "3.13", django-version: "6.0" }
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_project
+        ports:
+          - 5432:5432
+        # Wait until Postgres is accepting connections before the job runs.
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # Wire test_project/settings.py to the service container (PSQL=1 switches
+      # settings from SQLite to PostgreSQL). Host is 127.0.0.1 from the runner.
+      PSQL: "1"
+      PSQL_HOST: "127.0.0.1"
+      PSQL_PORT: "5432"
+      PSQL_USER: "postgres"
+      PSQL_PASSWORD: "postgres"
+      PSQL_NAME: "test_project"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history + tags so setuptools-scm can derive the version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras
+
+      - name: Verify the PostgreSQL backend is really in use
+        # Fails loudly if settings silently fell back to SQLite, and prints the
+        # engine + psycopg version + db_type() as log evidence of the native path.
+        env:
+          DJANGO_SETTINGS_MODULE: test_project.settings
+          PYTHONPATH: ".:test_project"
+        run: >-
+          uv run --extra dev
+          --with "django~=${{ matrix.django-version }}.0"
+          --with "psycopg[binary]"
+          python -c "import django, psycopg; django.setup();
+          from django.db import connection;
+          from interval.fields import IntervalField;
+          e = connection.settings_dict['ENGINE'];
+          print('ENGINE =', e, '| psycopg', psycopg.__version__,
+          '| db_type =', IntervalField().db_type(connection));
+          assert 'postgresql' in e, e;
+          assert IntervalField().db_type(connection) == 'INTERVAL'"
+
+      - name: Run tests (Django ${{ matrix.django-version }}, PostgreSQL)
+        # `uv run` re-syncs to the lockfile, so psycopg is pinned into the run
+        # via --with (the same reason Django is overlaid this way). --extra dev
+        # keeps pytest in the resolved environment. `python -m pytest` avoids any
+        # ambiguity about which pytest is on PATH.
+        run: >-
+          uv run --extra dev
+          --with "django~=${{ matrix.django-version }}.0"
+          --with "psycopg[binary]"
+          python -m pytest -v
 
   lint:
     runs-on: ubuntu-latest

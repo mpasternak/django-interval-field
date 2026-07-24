@@ -32,6 +32,9 @@ dependencies = ["django>=4.2"]
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-django"]
+# The PostgreSQL driver is optional: the field also works on the BIGINT
+# fallback backends. Exercised by the Postgres CI job.
+postgres = ["psycopg[binary]"]
 
 [project.urls]
 Homepage = "https://github.com/mpasternak/django-interval-field"
