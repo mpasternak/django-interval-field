@@ -37,6 +37,7 @@ dev = ["pytest", "pytest-django"]
 postgres = ["psycopg[binary]"]
 
 [project.urls]
+Funding = "https://buymeacoffee.com/mpasternak"
 Homepage = "https://github.com/mpasternak/django-interval-field"
 Repository = "https://github.com/mpasternak/django-interval-field"
 Issues = "https://github.com/mpasternak/django-interval-field/issues"
