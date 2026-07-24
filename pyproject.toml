@@ -30,12 +30,21 @@ classifiers = [
 ]
 dependencies = ["django>=4.2", "six"]
 
+[project.optional-dependencies]
+dev = ["pytest", "pytest-django"]
+
 [project.urls]
 Homepage = "https://github.com/mpasternak/django-interval-field"
 Repository = "https://github.com/mpasternak/django-interval-field"
 Issues = "https://github.com/mpasternak/django-interval-field/issues"
 
 [tool.setuptools_scm]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "test_project.settings"
+python_files = ["test_*.py", "tests.py"]
+pythonpath = [".", "test_project"]
+testpaths = ["interval", "test_project"]
 
 [tool.ruff]
 target-version = "py310"
