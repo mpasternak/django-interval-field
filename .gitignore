@@ -20,6 +20,10 @@ pip-log.txt
 .coverage
 .tox
 
+# uv / virtualenv
+.venv/
+uv.lock
+
 #Translations
 *.mo
 
