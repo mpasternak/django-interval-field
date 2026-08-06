@@ -3,7 +3,7 @@
 [![Tests](https://github.com/mpasternak/django-interval-field/actions/workflows/tests.yml/badge.svg)](https://github.com/mpasternak/django-interval-field/actions/workflows/tests.yml)
 [![PyPI](https://img.shields.io/pypi/v/django-pgsql-interval-field.svg)](https://pypi.org/project/django-pgsql-interval-field/)
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)
-![Django](https://img.shields.io/badge/django-5.2%20%7C%206.0-blue)
+![Django](https://img.shields.io/badge/django-5.2%20%7C%206.0%20%7C%206.1-blue)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 An `INTERVAL` model field for Django, backed by PostgreSQL's native `INTERVAL`
@@ -37,6 +37,7 @@ Tested in CI against these Django × Python combinations:
 |---------|------|------|------|------|------|
 | 5.2 LTS | ✓    | ✓    | ✓    | ✓    | ✓    |
 | 6.0     | —    | —    | ✓    | ✓    | ✓    |
+| 6.1     | —    | —    | ✓    | ✓    | ✓    |
 
 ## Installation
 
