@@ -21,7 +21,7 @@ jobs:
       matrix:
         # Derived from requires-python (>=3.10) + the django>=4.2 constraint
         # + the canonical Django x Python compatibility matrix. Only the
-        # upstream-supported Django series are tested (5.2 LTS and 6.0);
+        # upstream-supported Django series are tested (5.2 LTS, 6.0 and 6.1);
         # 4.2/5.0/5.1 are EOL. Recompute this list on every re-run.
         include:
           # Django 5.2 LTS (Python 3.10-3.14)
@@ -34,6 +34,10 @@ jobs:
           - { python-version: "3.12", django-version: "6.0" }
           - { python-version: "3.13", django-version: "6.0" }
           - { python-version: "3.14", django-version: "6.0" }
+          # Django 6.1 (Python 3.12-3.14 only)
+          - { python-version: "3.12", django-version: "6.1" }
+          - { python-version: "3.13", django-version: "6.1" }
+          - { python-version: "3.14", django-version: "6.1" }
 
     steps:
       - uses: actions/checkout@v7
@@ -61,8 +65,8 @@ jobs:
     # Exercises the native PostgreSQL INTERVAL code path (db_type() -> INTERVAL,
     # get_db_prep_value() handing a timedelta to psycopg, and reading an
     # INTERVAL column back as a timedelta). The SQLite matrix above only
-    # covers the BIGINT fallback. A small 2-cell matrix (5.2 LTS + 6.0 on a
-    # recent Python) keeps CI cost low.
+    # covers the BIGINT fallback. A small 3-cell matrix (5.2 LTS + 6.0 + 6.1
+    # on a recent Python) keeps CI cost low.
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -70,6 +74,7 @@ jobs:
         include:
           - { python-version: "3.13", django-version: "5.2" }
           - { python-version: "3.13", django-version: "6.0" }
+          - { python-version: "3.13", django-version: "6.1" }
 
     services:
       postgres:
